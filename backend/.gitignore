@@ -9,15 +9,10 @@
 /coverage
 
 # enviroments
-.env
 .venv
-env/
 venv/
-ENV/
-env.bak/
 venv.back/
-**/.env
-*.env
+
 
 # production
 
