@@ -33,7 +33,7 @@ Este es un proyecto plataforma SIN-RAI
 ### 1️⃣ Clonar el repositorio
 
 ```bash
-git clone https://github.com/Francovg18/PlataformaAI.git
+git clone https://github.com/VegaAlex20/PlataformaAI.git
 cd PlataformaAI
 ```
 
