@@ -34,7 +34,7 @@ Este es un proyecto plataforma SIN-RAI
 
 ```bash
 git clone https://github.com/Francovg18/PlataformaAI.git
-cd ecommerce
+cd PlataformaAI
 ```
 
 ### 2️⃣ Configurar Backend
