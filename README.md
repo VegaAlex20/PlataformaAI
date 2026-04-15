@@ -1,7 +1,7 @@
 
-#  Plataforma educativa
+#  Plataforma SIN-RAI
 
-Este es un proyecto plataforma educativa
+Este es un proyecto plataforma SIN-RAI
 
 ---
 
@@ -41,7 +41,7 @@ cd ecommerce
 
 ```bash
 python -m venv venv
-source venv/bin/activate  # En Windows: venv\Scripts\activate
+source venv/bin/activate  # En Windows: ./venv/Scripts/activate
 cd backend
 pip install -r requirements.txt
 
@@ -57,7 +57,7 @@ cd ..
 ```bash
 cd frontend
 npm install
-npm run build
+npm run buil
 npm start
 ```
 
@@ -76,7 +76,7 @@ python manage.py runserver
 ## 📁 Estructura de Carpetas
 
 ```
-ecommerce/
+PlataformaAi/
 ├── backend/              # Proyecto Django
 │   └── apps/             # Apps internas (user, etc.)
 │   └── requirements.txt  # Dependencias Python
