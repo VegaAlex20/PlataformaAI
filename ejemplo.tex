@@ -1,0 +1,276 @@
+\documentclass[12pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage{colortbl}
+
+\geometry{margin=1in}
+
+\definecolor{headerblue}{RGB}{31, 78, 121}
+\definecolor{rowgray}{RGB}{242, 242, 242}
+
+\title{Predicción de Riesgo Operativo en Rutas de Transporte}
+\author{Proyecto de Analítica de Datos - BI y Machine Learning}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+%--------------------------------------------------------
+\section{Introducción General}
+
+En la actualidad, las empresas de transporte y logística requieren sistemas avanzados de análisis de datos que permitan anticipar riesgos operativos en la gestión de flotas. El presente proyecto tiene como objetivo desarrollar un modelo de Machine Learning para la predicción del riesgo operativo en viajes de transporte, utilizando datos provenientes de un Data Warehouse implementado en Snowflake y fuentes de telemetría en tiempo real.
+
+El enfoque del proyecto integra técnicas de Business Intelligence, ingeniería de características y aprendizaje supervisado para transformar datos históricos en conocimiento accionable.
+
+%--------------------------------------------------------
+\section{Arquitectura de Datos}
+
+El sistema de datos se basa en una arquitectura híbrida compuesta por:
+
+\begin{itemize}
+    \item \textbf{Data Warehouse (Snowflake)}: encargado del almacenamiento estructurado de datos operacionales.
+    \item \textbf{Base NoSQL (MongoDB)}: utilizada para almacenar eventos de telemetría y alertas GPS.
+    \item \textbf{Proceso ETL}: encargado de la integración, limpieza y transformación de datos.
+    \item \textbf{Capa analítica}: donde se construye el dataset final para Machine Learning.
+\end{itemize}
+
+%--------------------------------------------------------
+\section{Fuentes de Datos}
+
+Las principales fuentes de información utilizadas son:
+
+\subsection{Data Warehouse}
+
+\begin{itemize}
+    \item FACT\_VIAJE: contiene información operacional de cada viaje.
+    \item DIM\_CONDUCTOR: información de los conductores.
+    \item DIM\_VEHICULO: características de los vehículos.
+    \item DIM\_RUTA: información de rutas logísticas.
+    \item INT\_VIAJE\_TELEMETRIA: datos intermedios de telemetría.
+\end{itemize}
+
+\subsection{Base NoSQL}
+
+\begin{itemize}
+    \item GPS\_ALERTA: registros de eventos como exceso de velocidad, pánico del conductor y alertas críticas.
+\end{itemize}
+
+%--------------------------------------------------------
+\section{Construcción del Dataset}
+
+El dataset final fue construido mediante la integración de múltiples fuentes, consolidando la información a nivel de viaje. El resultado es un conjunto de datos con 10,245 registros y 12 variables.
+
+%--------------------------------------------------------
+\section{Variable Objetivo}
+
+La variable objetivo del modelo es:
+
+\begin{itemize}
+    \item \textbf{RIESGO}
+    \begin{itemize}
+        \item 0 = Viaje normal sin incidentes relevantes
+        \item 1 = Viaje con alto riesgo operativo
+    \end{itemize}
+\end{itemize}
+
+Esta variable fue construida a partir de reglas de negocio basadas en eventos de telemetría y alertas operativas.
+
+%--------------------------------------------------------
+\section{Variables Predictoras}
+
+\subsection{Variables Operativas}
+
+\begin{itemize}
+    \item DISTANCIA\_KM
+    \item OCUPACION\_PCT
+    \item VELOCIDAD\_PROMEDIO\_KMH
+\end{itemize}
+
+\subsection{Capacidad Logística}
+
+\begin{itemize}
+    \item CAPACIDAD\_KG
+    \item PESO\_TOTAL\_ASIGNADO\_KG
+\end{itemize}
+
+\subsection{Costos Operativos}
+
+\begin{itemize}
+    \item COSTO\_OPERATIVO\_TOTAL\_BOB
+    \item COSTO\_COMBUSTIBLE\_TOTAL\_BOB
+    \item COSTO\_OPERATIVO\_KM\_BOB
+\end{itemize}
+
+\subsection{Telemetría}
+
+\begin{itemize}
+    \item COBERTURA\_TELEMETRIA\_PCT
+    \item INTERRUPCIONES\_SENAL\_COUNT
+\end{itemize}
+
+%--------------------------------------------------------
+\section{Análisis Exploratorio}
+
+El dataset presenta las siguientes características:
+
+\begin{itemize}
+    \item Número total de registros: 10,245
+    \item Variables: 12
+\end{itemize}
+
+\subsection{Distribución de la Variable Objetivo}
+
+\begin{itemize}
+    \item Clase 0 (sin riesgo): 78.1\%
+    \item Clase 1 (con riesgo): 21.9\%
+\end{itemize}
+
+Se observa un ligero desbalance de clases, lo cual debe ser considerado durante la fase de entrenamiento del modelo.
+
+%--------------------------------------------------------
+\section{Descripción del Modelo}
+
+El modelo propuesto corresponde a un problema de clasificación binaria supervisada. El objetivo es predecir la probabilidad de riesgo operativo en un viaje de transporte.
+
+El modelo aprende patrones relacionados con:
+
+\begin{itemize}
+    \item Condiciones operativas del viaje
+    \item Costos logísticos
+    \item Comportamiento del vehículo
+    \item Condiciones de telemetría
+\end{itemize}
+
+El resultado esperado es una probabilidad de riesgo que permita anticipar eventos críticos.
+
+%--------------------------------------------------------
+\section{Metodología de Machine Learning}
+
+El proceso de modelado incluye las siguientes etapas:
+
+\begin{enumerate}
+    \item Limpieza de datos
+    \item Selección de variables
+    \item División de dataset (train/test)
+    \item Entrenamiento del modelo
+    \item Evaluación del modelo
+    \item Validación de resultados
+\end{enumerate}
+
+Se recomienda el uso de algoritmos como:
+
+\begin{itemize}
+    \item Random Forest
+    \item KNN
+    \item Arboles de desicion
+\end{itemize}
+
+%--------------------------------------------------------
+\section{Especificaciones Técnicas del Modelo}
+
+A continuación se detallan las características técnicas
+
+\begin{longtable}{>{\bfseries\color{white}\columncolor{headerblue}}p{5.5cm} p{9cm}}
+\caption{Ficha Técnica del Modelo de Predicción de Riesgo Operativo} \\
+\rowcolor{headerblue}
+\textbf{\color{white}Característica} & \textbf{\color{white}Modelo Random forest } \\
+\endfirsthead
+\rowcolor{headerblue}
+\textbf{\color{white}Característica} & \textbf{\color{white}Modelo Random forest} \\
+\endhead
+\rowcolor{rowgray}
+Algoritmo & Random forest \\
+Tipo de aprendizaje & Supervisado (clasificación binaria) \\
+\rowcolor{rowgray}
+Tipo de datos (fuente) & Data Warehouse Snowflake + telemetría NoSQL MongoDB: datos estructurados de viajes, conductores, vehículos y alertas GPS \\
+Variable objetivo & RIESGO (0 = sin riesgo, 1 = alto riesgo operativo) \\
+\rowcolor{rowgray}
+Variables de entrada & DISTANCIA\_KM, OCUPACION\_PCT, VELOCIDAD\_PROMEDIO\_KMH, CAPACIDAD\_KG, PESO\_TOTAL\_ASIGNADO\_KG, COSTO\_OPERATIVO\_TOTAL\_BOB, COSTO\_COMBUSTIBLE\_TOTAL\_BOB, COSTO\_OPERATIVO\_KM\_BOB, COBERTURA\_TELEMETRIA\_PCT, INTERRUPCIONES\_SENAL\_COUNT \\
+Tamaño de datos & 10,245 registros con 12 variables \\
+\rowcolor{rowgray}
+Preprocesamiento aplicado & Integración ETL, limpieza de nulos, normalización de variables, tratamiento de desbalance de clases (SMOTE o pesos de clase) \\
+Ingeniería de características & Variables derivadas de costos por kilómetro, ratio de ocupación/capacidad, indicadores de cobertura de telemetría \\
+\rowcolor{rowgray}
+Parámetros del modelo & \texttt{n\_estimators=200}, \texttt{learning\_rate=0.05}, \texttt{max\_depth=5} \\
+Hiperparámetros adicionales & \texttt{subsample=0.8}, \texttt{colsample\_bytree=0.8}, \texttt{scale\_pos\_weight} (ajuste por desbalance), \texttt{random\_state=42} \\
+\rowcolor{rowgray}
+División de datos & 80\% entrenamiento / 20\% prueba \\
+Tipo de partición & Estratificada por clase objetivo para preservar distribución \\
+\rowcolor{rowgray}
+Validación del modelo & Validación cruzada estratificada con 5 folds \\
+Métrica de validación & AUC-ROC, F1-Score por cada fold \\
+\rowcolor{rowgray}
+Entrenamiento & Sobre datos históricos de viajes con etiquetas de riesgo verificadas \\
+Predicción & Probabilidad de riesgo operativo y clasificación binaria por viaje \\
+\rowcolor{rowgray}
+Métricas de evaluación & Accuracy, Precision, Recall, F1-Score, AUC-ROC, Matriz de Confusión \\
+Interpretabilidad & Alta (permite analizar importancia de variables mediante SHAP o feature importance) \\
+\rowcolor{rowgray}
+Control de sobreajuste & Ajuste de \texttt{max\_depth}, \texttt{learning\_rate}, \texttt{subsampling} y \texttt{early stopping} \\
+Hardware requerido & CPU (no requiere GPU) \\
+\rowcolor{rowgray}
+Tiempo de entrenamiento & Corto (segundos a minutos según tamaño de datos) \\
+Tipo de problema & Clasificación binaria supervisada \\
+\rowcolor{rowgray}
+Salida del modelo & Probabilidad de riesgo [0,1] y etiqueta de clase predicha \\
+Visualización & Curva ROC, matriz de confusión, importancia de variables \\
+\rowcolor{rowgray}
+Aplicación práctica & Predicción anticipada de riesgo operativo en viajes de transporte logístico \\
+\end{longtable}
+
+%--------------------------------------------------------
+\section{Beneficios del Modelo}
+
+\begin{itemize}
+    \item Reducción de accidentes en rutas de transporte
+    \item Mejora en la seguridad operativa
+    \item Optimización de costos logísticos
+    \item Monitoreo predictivo basado en datos históricos
+\end{itemize}
+
+%--------------------------------------------------------
+\section{Impacto Organizacional}
+
+\subsection{Nivel Operativo}
+
+\begin{itemize}
+    \item Generación de alertas automáticas en tiempo real
+    \item Apoyo a decisiones inmediatas en ruta
+\end{itemize}
+
+\subsection{Nivel Táctico}
+
+\begin{itemize}
+    \item Identificación de conductores de alto riesgo
+    \item Evaluación de rutas críticas
+    \item Optimización de operaciones logísticas
+\end{itemize}
+
+\subsection{Nivel Estratégico}
+
+\begin{itemize}
+    \item Definición de políticas de seguridad
+    \item Optimización de inversiones en flota
+    \item Reducción de riesgos a largo plazo
+\end{itemize}
+
+%--------------------------------------------------------
+\section{Conclusiones}
+
+El modelo demuestra viabilidad de utilizar técnicas de Machine Learning para la predicción de riesgo operativo en transporte. La integración de datos estructurados del Data Warehouse en Snowflake permite construir un sistema inteligente capaz de apoyar la toma de decisiones en todos los niveles organizacionales.
+
+El modelo aporta una mejora significativa en las decisiones clave de la operación logística: al anticipar viajes de alto riesgo, los supervisores pueden reasignar conductores, ajustar rutas o reforzar el monitoreo antes de que ocurran incidentes. Este tipo de intervención temprana se traduce en un retorno económico positivo, ya que el costo de prevención es considerablemente menor al costo de un accidente, sanción o pérdida de carga. En cuanto a la precisión del modelo, el uso de RandomForest con validación cruzada estratificada y métricas como AUC-ROC y F1-Score garantiza que las predicciones sean confiables tanto para la clase mayoritaria (viajes sin riesgo) como para la minoría (viajes con riesgo), que es precisamente la de mayor interés operativo.
+
+La adopción del modelo también conlleva una reducción concreta de errores y pérdidas: al identificar patrones asociados al riesgo —como exceso de velocidad, interrupciones de señal, alta carga o costos atípicos— se minimizan los falsos negativos que podrían derivar en consecuencias graves. En términos de velocidad de respuesta, el sistema permite pasar de una revisión manual y reactiva a un proceso automatizado que evalúa cada viaje en segundos, liberando tiempo del equipo operativo para tareas de mayor valor. La automatización de procesos es otro beneficio clave: el pipeline de datos integra de forma automática las fuentes del Data Warehouse y la telemetría, eliminando tareas repetitivas de consolidación manual.
+
+La interpretabilidad del modelo es un factor diferenciador importante. A través del análisis de importancia de variables y herramientas como SHAP, el equipo de negocio puede comprender con claridad qué factores están impulsando cada predicción de riesgo, lo cual genera confianza en los resultados y facilita su adopción en el día a día operativo. Finalmente, el uso real por parte del equipo se ve favorecido por la naturaleza visual de las salidas del modelo —alertas, probabilidades y reportes— que se integran naturalmente en los flujos de trabajo existentes sin requerir conocimientos técnicos avanzados para su interpretación.
+
+\end{document}
